@@ -1,5 +1,19 @@
-# Default ignored files
+# Android Studio / IntelliJ IDEA ignored files
 /shelf/
 /workspace.xml
+/gradle.xml
+/compiler.xml
+/misc.xml
+/assetWizardSettings.xml
+/navEditor.xml
 /deviceManager.xml
 /deploymentTargetSelector.xml
+/runConfigurations/
+/caches/
+/libraries/
+/modules.xml
+/usage.statistics.xml
+/tasks.xml
+/dictionaries/
+/dataSources/
+/dataSources.local.xml
