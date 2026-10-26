@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.alextruck.dayloom"
-    compileSdk = 37
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.alextruck.dayloom"
         minSdk = 24
-        targetSdk = 37
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.appcompat)
 
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
