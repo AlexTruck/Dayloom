@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Dayloom</string>
+    <string name="home_title">Today’s Tapestry</string>
+    <string name="prompt_title">Moment Reflection</string>
+    <string name="add_thread">Add Thread</string>
+    <string name="evening_weave">Evening Weave</string>
+    <string name="echo_title">Echo from the Past</string>
+    <string name="tapestry_archive">Tapestry Archive</string>
+    <string name="settings">Settings</string>
+    <string name="export_data">Export Data (JSON)</string>
+    <string name="import_data">Import Data (JSON)</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="quiet_hours">Quiet Hours</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="reflection_prompt">What has changed since then?</string>
+</resources>
