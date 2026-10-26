@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Dayloom</string>
+    <string name="home_title">Heutiger Wandteppich</string>
+    <string name="prompt_title">Moment-Reflexion</string>
+    <string name="add_thread">Faden hinzufügen</string>
+    <string name="evening_weave">Abendgewebe</string>
+    <string name="echo_title">Echo aus der Vergangenheit</string>
+    <string name="tapestry_archive">Teppicharchiv</string>
+    <string name="settings">Einstellungen</string>
+    <string name="export_data">Daten exportieren (JSON)</string>
+    <string name="import_data">Daten importieren (JSON)</string>
+    <string name="dark_mode">Dunkler Modus</string>
+    <string name="quiet_hours">Ruhezeiten</string>
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="reflection_prompt">Was hat sich seitdem verändert?</string>
+</resources>
