@@ -1,7 +1,5 @@
 package com.alextruck.dayloom.domain.model
 
-import java.util.Locale
-
 enum class ReflectivePrompt(val questionEn: String, val questionDe: String) {
     MORNING_ENERGY(
         "What word describes your morning energy?",
@@ -21,8 +19,7 @@ enum class ReflectivePrompt(val questionEn: String, val questionDe: String) {
     );
 
     companion object {
-        fun random(): String {
-            val isGerman = Locale.getDefault().language.equals("de", ignoreCase = true)
+        fun random(isGerman: Boolean): String {
             val prompt = entries.random()
             return if (isGerman) prompt.questionDe else prompt.questionEn
         }

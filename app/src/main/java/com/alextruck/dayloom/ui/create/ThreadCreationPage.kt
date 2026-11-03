@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alextruck.dayloom.domain.model.ThreadType
+import com.alextruck.dayloom.ui.theme.LocalStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,6 +24,7 @@ fun ThreadCreationPage(
     onSaveThread: (ThreadType, String, String) -> Unit,
     onNavigateBack: () -> Unit
 ) {
+    val strings = LocalStrings.current
     var selectedTab by remember { mutableIntStateOf(0) } // 0: Emoji, 1: Word, 2: Tag
     var textInput by remember { mutableStateOf("") }
     var selectedEmoji by remember { mutableStateOf("✨") }
@@ -32,10 +34,10 @@ fun ThreadCreationPage(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Weave a Thread") },
+                title = { Text(strings.weaveAThread) },
                 navigationIcon = {
                     TextButton(onClick = onNavigateBack) {
-                        Text("Cancel")
+                        Text(strings.cancel)
                     }
                 }
             )
@@ -55,7 +57,7 @@ fun ThreadCreationPage(
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
-                        text = "Today's Prompt",
+                        text = strings.todaysPrompt,
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -69,9 +71,9 @@ fun ThreadCreationPage(
 
             // Tab Selector
             TabRow(selectedTabIndex = selectedTab) {
-                Tab(selected = selectedTab == 0, onClick = { selectedTab = 0 }, text = { Text("Emoji") })
-                Tab(selected = selectedTab == 1, onClick = { selectedTab = 1 }, text = { Text("One Word") })
-                Tab(selected = selectedTab == 2, onClick = { selectedTab = 2 }, text = { Text("Tag") })
+                Tab(selected = selectedTab == 0, onClick = { selectedTab = 0 }, text = { Text(strings.emoji) })
+                Tab(selected = selectedTab == 1, onClick = { selectedTab = 1 }, text = { Text(strings.oneWord) })
+                Tab(selected = selectedTab == 2, onClick = { selectedTab = 2 }, text = { Text(strings.tag) })
             }
 
             // Input Content based on tab
@@ -79,7 +81,7 @@ fun ThreadCreationPage(
                 when (selectedTab) {
                     0 -> {
                         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Text(text = "Selected: $selectedEmoji", style = MaterialTheme.typography.headlineMedium)
+                            Text(text = strings.selectedEmojiFormat(selectedEmoji), style = MaterialTheme.typography.headlineMedium)
                             LazyVerticalGrid(
                                 columns = GridCells.Fixed(4),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -104,7 +106,7 @@ fun ThreadCreationPage(
                         OutlinedTextField(
                             value = textInput,
                             onValueChange = { textInput = it },
-                            label = { Text("Enter one word...") },
+                            label = { Text(strings.enterOneWord) },
                             modifier = Modifier.fillMaxWidth(),
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp)
@@ -114,7 +116,7 @@ fun ThreadCreationPage(
                         OutlinedTextField(
                             value = textInput,
                             onValueChange = { textInput = it },
-                            label = { Text("Enter tag (e.g. #calm)") },
+                            label = { Text(strings.enterTag) },
                             modifier = Modifier.fillMaxWidth(),
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp)
@@ -140,7 +142,7 @@ fun ThreadCreationPage(
                     .height(50.dp),
                 shape = RoundedCornerShape(14.dp)
             ) {
-                Text(text = "Weave Thread", fontSize = 16.sp)
+                Text(text = strings.weaveThread, fontSize = 16.sp)
             }
         }
     }

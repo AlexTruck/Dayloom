@@ -1,6 +1,10 @@
 package com.alextruck.dayloom.ui.navigation
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -14,11 +18,28 @@ import com.alextruck.dayloom.ui.settings.SettingsPage
 import com.alextruck.dayloom.ui.weave.WeaveDetailPage
 import com.alextruck.dayloom.domain.model.Weave
 import com.alextruck.dayloom.ui.echo.EchoPage
+import com.alextruck.dayloom.util.LanguageManager
+import java.util.Locale
 
 @Composable
 fun DayloomNavGraph() {
+    val context = LocalContext.current
+    val startDestination = remember { LanguageManager.consumeLastRoute(context) }
     val navController = rememberNavController()
     val homeViewModel: HomeViewModel = viewModel()
+
+    val currentLocale = AppCompatDelegate.getApplicationLocales().toLanguageTags()
+    val isGerman = currentLocale.startsWith("de") || Locale.getDefault().language.equals("de", ignoreCase = true)
+
+    val defaultPrompt = if (isGerman) "Was beschäftigt dich gerade?" else "What is on your mind?"
+
+    LaunchedEffect(startDestination) {
+        if (startDestination != "home") {
+            navController.navigate(startDestination) {
+                launchSingleTop = true
+            }
+        }
+    }
 
     NavHost(navController = navController, startDestination = "home") {
         composable("home") {
@@ -40,9 +61,9 @@ fun DayloomNavGraph() {
         }
         composable(
             route = "create?prompt={prompt}",
-            arguments = listOf(navArgument("prompt") { defaultValue = "What is on your mind?" })
+            arguments = listOf(navArgument("prompt") { defaultValue = defaultPrompt })
         ) { backStackEntry ->
-            val prompt = backStackEntry.arguments?.getString("prompt") ?: "What is on your mind?"
+            val prompt = backStackEntry.arguments?.getString("prompt") ?: defaultPrompt
             ThreadCreationPage(
                 prompt = prompt,
                 onSaveThread = { type, content, promptQuestion ->
@@ -59,12 +80,12 @@ fun DayloomNavGraph() {
             arguments = listOf(navArgument("date") { type = NavType.StringType })
         ) { backStackEntry ->
             val date = backStackEntry.arguments?.getString("date") ?: ""
-            // Simple mock/sample weave retrieval or from VM
+            val mood = if (isGerman) "Ein friedlicher Tag voller sanfter Momente." else "A peaceful day filled with gentle moments."
             val sampleWeave = Weave(
                 dateString = date,
-                moodSummary = "A peaceful day filled with gentle moments.",
+                moodSummary = mood,
                 colorPaletteHex = listOf("#C86D51", "#7A8B79", "#F3EFEA"),
-                keywords = listOf("calm", "focus", "rest"),
+                keywords = listOf(if (isGerman) "ruhe" else "calm", if (isGerman) "fokus" else "focus", if (isGerman) "ruhe" else "rest"),
                 createdAt = System.currentTimeMillis()
             )
             WeaveDetailPage(
@@ -80,10 +101,10 @@ fun DayloomNavGraph() {
             val sampleThread = com.alextruck.dayloom.domain.model.Thread(
                 id = threadId,
                 timestamp = System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000L,
-                dateString = "30 days ago",
+                dateString = if (isGerman) "Vor 30 Tagen" else "30 days ago",
                 type = com.alextruck.dayloom.domain.model.ThreadType.WORD,
-                content = "Seeking clarity",
-                promptQuestion = "What word describes your energy?"
+                content = if (isGerman) "Auf der Suche nach Klarheit" else "Seeking clarity",
+                promptQuestion = if (isGerman) "Welches Wort beschreibt deine Morgenenergie?" else "What word describes your energy?"
             )
             EchoPage(
                 thread = sampleThread,

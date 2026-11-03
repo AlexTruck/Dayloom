@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.alextruck.dayloom.domain.model.Weave
 import androidx.core.graphics.toColorInt
+import com.alextruck.dayloom.ui.theme.LocalStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,13 +21,15 @@ fun WeaveDetailPage(
     weave: Weave?,
     onNavigateBack: () -> Unit
 ) {
+    val strings = LocalStrings.current
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Evening Weave") },
+                title = { Text(strings.eveningWeave) },
                 navigationIcon = {
                     TextButton(onClick = onNavigateBack) {
-                        Text("Back")
+                        Text(strings.back)
                     }
                 }
             )
@@ -41,7 +44,7 @@ fun WeaveDetailPage(
         ) {
             if (weave == null) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No Weave generated for this date yet.")
+                    Text(strings.noWeaveDate)
                 }
             } else {
                 Card(
@@ -51,7 +54,7 @@ fun WeaveDetailPage(
                 ) {
                     Column(modifier = Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         Text(
-                            text = "Date: ${weave.dateString}",
+                            text = weave.dateString,
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -84,7 +87,7 @@ fun WeaveDetailPage(
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
                     Column(modifier = Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Text(text = "Atmospheric Palette", style = MaterialTheme.typography.titleLarge)
+                        Text(text = strings.atmosphericPalette, style = MaterialTheme.typography.titleLarge)
                         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                             weave.colorPaletteHex.forEach { hex ->
                                 val color = try {
