@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alextruck.dayloom.domain.model.Thread
+import com.alextruck.dayloom.ui.theme.LocalStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,6 +32,7 @@ fun HomePage(
     onNavigateToEcho: (Long) -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
+    val strings = LocalStrings.current
     val threads by viewModel.todayThreads.collectAsState()
     val weave by viewModel.todayWeave.collectAsState()
     val echo by viewModel.echoThread.collectAsState()
@@ -39,10 +41,10 @@ fun HomePage(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Dayloom", style = MaterialTheme.typography.headlineMedium) },
+                title = { Text(strings.appName, style = MaterialTheme.typography.headlineMedium) },
                 actions = {
                     IconButton(onClick = onNavigateToSettings) {
-                        Icon(Icons.Default.Settings, contentDescription = "Settings")
+                        Icon(Icons.Default.Settings, contentDescription = strings.settings)
                     }
                 }
             )
@@ -53,7 +55,7 @@ fun HomePage(
                 shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Thread", tint = Color.White)
+                Icon(Icons.Default.Add, contentDescription = strings.addThread, tint = Color.White)
             }
         }
     ) { padding ->
@@ -76,7 +78,7 @@ fun HomePage(
                 ) {
                     Column(modifier = Modifier.padding(20.dp)) {
                         Text(
-                            text = "A quiet moment for you",
+                            text = strings.quietMomentPrompt,
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -87,7 +89,7 @@ fun HomePage(
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = "Tap to weave a thread →",
+                            text = strings.tapToWeave,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.secondary
                         )
@@ -107,7 +109,7 @@ fun HomePage(
                     ) {
                         Column(modifier = Modifier.padding(20.dp)) {
                             Text(
-                                text = "Echo from 30 Days Ago",
+                                text = strings.echoFromPast30,
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.secondary
                             )
@@ -118,7 +120,7 @@ fun HomePage(
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "What has changed since then? Tap to reflect.",
+                                text = strings.reflectionPrompt,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -138,7 +140,7 @@ fun HomePage(
                     ) {
                         Column(modifier = Modifier.padding(20.dp)) {
                             Text(
-                                text = "Today's Evening Weave",
+                                text = strings.todaysEveningWeave,
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.primary
                             )
@@ -154,7 +156,7 @@ fun HomePage(
 
             item {
                 Text(
-                    text = "Today's Threads (${threads.size})",
+                    text = strings.todaysThreadsFormat(threads.size),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -169,7 +171,7 @@ fun HomePage(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No threads woven yet today.\nCapture your first moment above.",
+                            text = strings.noThreadsToday,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )

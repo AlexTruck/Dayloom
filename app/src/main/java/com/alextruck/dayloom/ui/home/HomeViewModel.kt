@@ -1,6 +1,7 @@
 package com.alextruck.dayloom.ui.home
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.alextruck.dayloom.data.local.DayloomDatabase
@@ -36,7 +37,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val currentPrompt: String
-        get() = ReflectivePrompt.random()
+        get() = ReflectivePrompt.random(AppCompatDelegate.getApplicationLocales().toLanguageTags().startsWith("de") || Locale.getDefault().language.equals("de", ignoreCase = true))
 
     fun addThread(type: ThreadType, content: String, prompt: String, note: String? = null) {
         viewModelScope.launch {
@@ -58,7 +59,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         if (threads.size >= 2 && repository.getWeaveForDate(currentDateString) == null) {
             val emojis = threads.filter { it.type == ThreadType.EMOJI }.map { it.content }
             val words = threads.filter { it.type == ThreadType.WORD || it.type == ThreadType.TAG }.map { it.content }
-            val summary = if (words.isNotEmpty()) "A day woven with ${words.joinToString(", ")}." else "A quiet, reflective day."
+            val isGerman = AppCompatDelegate.getApplicationLocales().toLanguageTags().startsWith("de") || Locale.getDefault().language.equals("de", ignoreCase = true)
+            val summary = if (words.isNotEmpty()) {
+                if (isGerman) "Ein Tag gewoben mit ${words.joinToString(", ")}." else "A day woven with ${words.joinToString(", ")}."
+            } else {
+                if (isGerman) "Ein ruhiger, reflektierender Tag." else "A quiet, reflective day."
+            }
             val palette = listOf("#C86D51", "#7A8B79", "#F3EFEA")
             val weave = Weave(
                 dateString = currentDateString,

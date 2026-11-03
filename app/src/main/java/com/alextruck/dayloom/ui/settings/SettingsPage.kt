@@ -1,5 +1,10 @@
 package com.alextruck.dayloom.ui.settings
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.compose.foundation.layout.*
@@ -8,13 +13,27 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.alextruck.dayloom.R
+import com.alextruck.dayloom.util.LanguageManager
+
+fun Context.findActivity(): Activity? {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is Activity) return context
+        context = context.baseContext
+    }
+    return null
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(
     onNavigateBack: () -> Unit
 ) {
+    val context = LocalContext.current
     var notificationsEnabled by remember { mutableStateOf(true) }
     var quietHours by remember { mutableStateOf(true) }
 
@@ -24,10 +43,10 @@ fun SettingsPage(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings / Einstellungen") },
+                title = { Text(stringResource(R.string.settings)) },
                 navigationIcon = {
                     TextButton(onClick = onNavigateBack) {
-                        Text("Back")
+                        Text(stringResource(R.string.back))
                     }
                 }
             )
@@ -47,7 +66,7 @@ fun SettingsPage(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Text(text = "Language / Sprache", style = MaterialTheme.typography.titleLarge)
+                    Text(text = stringResource(R.string.language), style = MaterialTheme.typography.titleLarge)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -56,6 +75,10 @@ fun SettingsPage(
                             onClick = {
                                 selectedLanguage = "en"
                                 AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
+                                LanguageManager.saveLastRoute(context, "settings")
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    context.findActivity()?.recreate()
+                                }, 100)
                             },
                             modifier = Modifier.weight(1f),
                             colors = ButtonDefaults.buttonColors(
@@ -63,12 +86,16 @@ fun SettingsPage(
                             ),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text("English")
+                            Text(stringResource(R.string.english))
                         }
                         Button(
                             onClick = {
                                 selectedLanguage = "de"
                                 AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("de"))
+                                LanguageManager.saveLastRoute(context, "settings")
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    context.findActivity()?.recreate()
+                                }, 100)
                             },
                             modifier = Modifier.weight(1f),
                             colors = ButtonDefaults.buttonColors(
@@ -76,7 +103,7 @@ fun SettingsPage(
                             ),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text("Deutsch")
+                            Text(stringResource(R.string.deutsch))
                         }
                     }
                 }
@@ -89,13 +116,13 @@ fun SettingsPage(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Text(text = "Notifications", style = MaterialTheme.typography.titleLarge)
+                    Text(text = stringResource(R.string.notifications), style = MaterialTheme.typography.titleLarge)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Daily Gentle Prompts")
+                        Text(text = stringResource(R.string.daily_gentle_prompts))
                         Switch(checked = notificationsEnabled, onCheckedChange = { notificationsEnabled = it })
                     }
                     Row(
@@ -103,7 +130,7 @@ fun SettingsPage(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Quiet Hours (10 PM - 8 AM)")
+                        Text(text = stringResource(R.string.quiet_hours))
                         Switch(checked = quietHours, onCheckedChange = { quietHours = it })
                     }
                 }
@@ -116,26 +143,26 @@ fun SettingsPage(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Text(text = "Data Archive", style = MaterialTheme.typography.titleLarge)
+                    Text(text = stringResource(R.string.data_archive), style = MaterialTheme.typography.titleLarge)
                     Button(
                         onClick = { /* Export JSON */ },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Export Data (JSON)")
+                        Text(text = stringResource(R.string.export_data))
                     }
                     OutlinedButton(
                         onClick = { /* Import JSON */ },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Import Data (JSON)")
+                        Text(text = stringResource(R.string.import_data))
                     }
                 }
             }
 
             Text(
-                text = "Dayloom v1.0 • 100% Offline & Private",
+                text = stringResource(R.string.app_footer),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                 modifier = Modifier.align(Alignment.CenterHorizontally)

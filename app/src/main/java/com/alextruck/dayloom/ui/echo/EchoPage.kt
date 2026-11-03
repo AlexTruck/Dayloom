@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alextruck.dayloom.domain.model.Thread
+import com.alextruck.dayloom.ui.theme.LocalStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -16,15 +17,16 @@ fun EchoPage(
     onSaveReflection: (String) -> Unit,
     onNavigateBack: () -> Unit
 ) {
+    val strings = LocalStrings.current
     var reflectionText by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Echo from the Past") },
+                title = { Text(strings.echoTitle) },
                 navigationIcon = {
                     TextButton(onClick = onNavigateBack) {
-                        Text("Back")
+                        Text(strings.back)
                     }
                 }
             )
@@ -39,7 +41,7 @@ fun EchoPage(
         ) {
             if (thread == null) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = androidx.compose.ui.Alignment.Center) {
-                    Text("Thread not found.")
+                    Text(strings.threadNotFound)
                 }
             } else {
                 Card(
@@ -49,7 +51,7 @@ fun EchoPage(
                 ) {
                     Column(modifier = Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text(
-                            text = "30 Days Ago (${thread.dateString})",
+                            text = "${strings.echoFromPast30} (${thread.dateString})",
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.secondary
                         )
@@ -58,7 +60,7 @@ fun EchoPage(
                             style = MaterialTheme.typography.headlineMedium
                         )
                         Text(
-                            text = "Prompt: ${thread.promptQuestion}",
+                            text = "${strings.todaysPrompt}: ${thread.promptQuestion}",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
@@ -68,7 +70,7 @@ fun EchoPage(
                 OutlinedTextField(
                     value = reflectionText,
                     onValueChange = { reflectionText = it },
-                    label = { Text("What has changed since then?") },
+                    label = { Text(strings.reflectionPrompt) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp),
@@ -86,7 +88,7 @@ fun EchoPage(
                         .height(50.dp),
                     shape = RoundedCornerShape(14.dp)
                 ) {
-                    Text(text = "Save Reflection", fontSize = 16.sp)
+                    Text(text = strings.saveReflection, fontSize = 16.sp)
                 }
             }
         }
